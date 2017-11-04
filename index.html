@@ -4,9 +4,40 @@
     <meta charset="uft-8">
     <title>Chat.io</title>
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <style>
+        body{
+            margin-top: 40px;
+        }
+    </style>
+
 </head>
 
 <body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="well">
+                <h3>Online Users</h3>
+                <ul class="list-group" id="users"></ul>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="chat" id="chat"></div>
+            <form id="messageForm">
+                <div class="form-group">
+                    <div class="col-md-8">
+                        <textarea class="form-control" id="message" rows="1" placeholder="Enter message"></textarea>
+                    </div>
+                    <input type="submit" class="btn btn-success" value="Send">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
