@@ -12,13 +12,30 @@
         body{
             margin-top: 40px;
         }
+
+        #messageArea{
+            display: none;
+        }
+
     </style>
 
 </head>
 
 <body>
 <div class="container">
-    <div class="row">
+    <div id="userFormArea" class="row">
+        <div class="col-md-12">
+            <form id="userForm">
+                <div class="form-group">
+                    <div class="col-md-8">
+                        <input class="form-control" id="username" placeholder="Enter username">
+                    </div>
+                    <input type="submit" class="btn btn-success" value="Send">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="messageArea" class="row">
         <div class="col-md-4">
             <div class="well">
                 <h3>Online Users</h3>
