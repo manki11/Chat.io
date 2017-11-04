@@ -10,6 +10,9 @@ $(function () {
         console.log($message.val());
         socket.emit('send message', $message.val());
         $message.val('');
-        
+    });
+
+    socket.on('new message', function (data) {
+        $chat.append('<div class="well">'+ data.msg +'</div>');
     });
 });
