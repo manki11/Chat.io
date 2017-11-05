@@ -1,5 +1,6 @@
 "use strict";
-var express= require("express");
+var express= require("express"),
+    mongoose= require("mongoose");
 var app= express();
 
 var server= require('http').createServer(app);
@@ -8,14 +9,20 @@ var io= require("socket.io").listen(server);
 var users = [];
 var connections = [];
 
-app.use(express.static(__dirname+"/public"));
+mongoose.Promise = global.Promise;
+mongoose.connect("mongodb://localhost/chat_app", {useMongoClient: true});
 
-server.listen(3000, function () {
-    console.log("server listening on port 3000");
+app.use(express.static(__dirname+"/public"));
+app.set("view engine", "ejs");
+
+//index route
+app.get('/', function (req, res) {
+    res.render('index');
 });
 
-app.get('/', function (req, res) {
-    res.sendFile(__dirname+'/index.html');
+//chat route
+app.get('/chat', function (req, res) {
+    res.render('chat');
 });
 
 io.on('connection', function (socket) {
@@ -33,7 +40,6 @@ io.on('connection', function (socket) {
 
     //Send Message
     socket.on('send message', function (data) {
-
         io.sockets.emit("new message", {msg: data, user: socket.username});
     });
 
@@ -48,4 +54,8 @@ io.on('connection', function (socket) {
     function updateUserNames() {
         io.sockets.emit('get users', users);
     }
+});
+
+server.listen(3000, function () {
+    console.log("server listening on port 3000");
 });
