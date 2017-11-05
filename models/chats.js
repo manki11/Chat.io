@@ -1,7 +1,13 @@
 var mongoose = require("mongoose");
 
 var ChatSchema= new mongoose.Schema({
-    username: String,
+    author:{
+        id:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"User"
+        },
+        username:String
+    },
     message: String
 });
 

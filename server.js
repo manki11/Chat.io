@@ -1,6 +1,8 @@
 "use strict";
 var express= require("express"),
-    mongoose= require("mongoose");
+    mongoose= require("mongoose"),
+    Chat= require("./models/chats"),
+    User= require("./models/users");
 var app= express();
 
 var server= require('http').createServer(app);
@@ -15,13 +17,8 @@ mongoose.connect("mongodb://localhost/chat_app", {useMongoClient: true});
 app.use(express.static(__dirname+"/public"));
 app.set("view engine", "ejs");
 
-//index route
-app.get('/', function (req, res) {
-    res.render('index');
-});
-
 //chat route
-app.get('/chat', function (req, res) {
+app.get('/', function (req, res) {
     res.render('chat');
 });
 
@@ -32,7 +29,6 @@ io.on('connection', function (socket) {
     //Disconnect
     socket.on('disconnect', function (data) {
         // if(!socket.username) return;
-        users.splice(users.indexOf(socket.username),1);
         updateUserNames();
         connections.splice(connections.indexOf(socket),1 );
         console.log('Disconnected: %s sockets connected', connections.length);
@@ -40,19 +36,40 @@ io.on('connection', function (socket) {
 
     //Send Message
     socket.on('send message', function (data) {
-        io.sockets.emit("new message", {msg: data, user: socket.username});
+        var message= data;
+
+        var author={
+            id:socket._id,
+            username:socket.username
+        };
+        Chat.create({author: author, message: message}, function (err, chatMessage) {
+            io.sockets.emit("new message", chatMessage);
+        });
     });
 
     //new user
     socket.on('new user', function (data, callback) {
-        callback(true);
-        socket.username= data;
-        users.push(socket.username);
-        updateUserNames();
+        User.create({username: data}, function (err, user) {
+            if(err){
+                console.log(err);
+            }else{
+                console.log("User created :"+ user.username);
+                callback(true);
+                socket.username= user.username;
+                socket._id= user._id;
+                updateUserNames();
+            }
+        });
     });
     
     function updateUserNames() {
-        io.sockets.emit('get users', users);
+        User.find(function (err, allUsers) {
+            if(err){
+                console.log(err);
+            }else{
+                io.sockets.emit('get users', allUsers);
+            }
+        });
     }
 });
 
