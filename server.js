@@ -49,16 +49,25 @@ io.on('connection', function (socket) {
 
     //new user
     socket.on('new user', function (data, callback) {
-        User.create({username: data}, function (err, user) {
+        User.find({username: data}, function (err, users) {
             if(err){
                 console.log(err);
+            }else if(users.length==0){
+                User.create({username: data}, function (err, user) {
+                    if(err){
+                        console.log(err);
+                    }else{
+                        console.log("User created :"+ user.username);
+                        callback({success: 1});
+                        socket.username= user.username;
+                        socket._id= user._id;
+                        updateUserNames();
+                        sendPreviousChat();
+                    }
+                });
             }else{
-                console.log("User created :"+ user.username);
-                callback(true);
-                socket.username= user.username;
-                socket._id= user._id;
-                updateUserNames();
-                sendPreviousChat();
+                console.log("User couldn't be created");
+                callback({success: 0});
             }
         });
     });

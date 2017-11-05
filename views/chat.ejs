@@ -17,6 +17,23 @@
             display: none;
         }
 
+        #warning{
+            color: red;
+            text-align: center;
+        }
+
+        #userFormArea {
+            margin-top: 100px;
+        }
+
+        h1{
+            font-weight: 200;
+            font-family: sans-serif;
+            color: #777777;
+            margin: 50px;
+            text-align: center;
+        }
+
     </style>
 
 </head>
@@ -25,12 +42,14 @@
 <div class="container">
     <div id="userFormArea" class="row">
         <div class="col-md-12">
+            <h1>Enter Username to Chat!</h1>
+            <p id="warning">Username must be unique</p>
             <form id="userForm">
                 <div class="form-group">
-                    <div class="col-md-8">
+                    <div class="col-md-10">
                         <input class="form-control" id="username" placeholder="Enter username">
                     </div>
-                    <input type="submit" class="btn btn-success" value="Send">
+                    <input type="submit" class="btn btn-success" value="Enter Chat">
                 </div>
             </form>
         </div>

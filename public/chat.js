@@ -7,15 +7,19 @@ $(function () {
     var $userForm= $("#userForm");
     var $users= $("#users");
     var $username= $("#username");
+    var $warning=$("#warning");
+    var first= true;
 
     //user form submission
     $userForm.submit(function (e) {
         e.preventDefault();
         console.log($username.val());
         socket.emit('new user', $username.val(), function (data) {
-            if(data) {
+            if(data.success=== 1) {
                 $userFormArea.hide();
                 $messageArea.show();
+            }else {
+                $warning.html("Please select a different username");
             }
         });
     });
@@ -40,9 +44,12 @@ $(function () {
     });
 
     socket.on('get previous messages', function (allChats) {
-       for(var i=0;i< allChats.length;i++){
-           $chat.append('<div class="well"><strong>'+allChats[i].author.username+'</strong>: '+ allChats[i].message +'</div>');
-       } 
+        if(first) {
+            for (var i = 0; i < allChats.length; i++) {
+                $chat.append('<div class="well"><strong>' + allChats[i].author.username + '</strong>: ' + allChats[i].message + '</div>');
+            }
+            first=false;
+        }
     });
 
     socket.on('get users', function (data) {
