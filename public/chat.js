@@ -56,7 +56,8 @@ $(function () {
         var html="";
 
         for(var i=0;i<data.length;i++){
-            html += "<li class='list-group-item'>"+data[i].username+"</li>";
+            var userStatus= data[i].online?"Online":"Offline";
+            html += "<li class='list-group-item'>"+data[i].username+ "<span class='status'>"+userStatus+"</span></li>";
         }
 
         $users.html(html);
