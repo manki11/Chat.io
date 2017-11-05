@@ -58,6 +58,7 @@ io.on('connection', function (socket) {
                 socket.username= user.username;
                 socket._id= user._id;
                 updateUserNames();
+                sendPreviousChat();
             }
         });
     });
@@ -68,6 +69,16 @@ io.on('connection', function (socket) {
                 console.log(err);
             }else{
                 io.sockets.emit('get users', allUsers);
+            }
+        });
+    }
+
+    function sendPreviousChat() {
+        Chat.find(function (err, allChats) {
+            if(err){
+                console.log(err);
+            }else{
+                io.sockets.emit('get previous messages', allChats);
             }
         });
     }

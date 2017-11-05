@@ -39,6 +39,12 @@ $(function () {
         $chat.append('<div class="well"><strong>'+data.author.username+'</strong>: '+ data.message +'</div>');
     });
 
+    socket.on('get previous messages', function (allChats) {
+       for(var i=0;i< allChats.length;i++){
+           $chat.append('<div class="well"><strong>'+allChats[i].author.username+'</strong>: '+ allChats[i].message +'</div>');
+       } 
+    });
+
     socket.on('get users', function (data) {
         var html="";
 
